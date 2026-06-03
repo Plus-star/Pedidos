@@ -1,0 +1,102 @@
+<div class="container" style="display: flex; gap: 20px;">
+
+  <div style="flex: 1;">
+
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+      <h2>Clientes</h2>
+      <button class="btn-info" (click)="verPedidosGenerales()">Ver Todos los Pedidos</button>
+          <button class="btn-info" (click)="listarClientes()">
+      Ver Todos los clientes
+    </button>
+
+    </div>
+
+    <p *ngIf="mensaje" class="mensaje">{{ mensaje }}</p>
+
+    <div class="card form-card">
+      <h3>{{ editandoId ? 'Editar cliente' : 'Nuevo cliente' }}</h3>
+
+      <input [(ngModel)]="form.nombre" placeholder="Nombre *" />
+      <input [(ngModel)]="form.email" placeholder="Email *" />
+
+      <div class="form-actions">
+        <button class="btn-primary" (click)="guardar()">
+          {{ editandoId ? 'Actualizar' : 'Crear' }}
+        </button>
+
+        <button class="btn-secondary" *ngIf="editandoId" (click)="limpiar()">
+          Cancelar
+        </button>
+      </div>
+    </div>
+
+    <div class="card table-card">
+
+      <table class="tabla">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Nombre</th>
+            <th>Email</th>
+            <th>Acciones</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          <tr *ngFor="let c of clientes"
+              (click)="seleccionarCliente(c)"
+              [class.selected]="clienteSeleccionado?.id_cliente === c.id_cliente">
+
+            <td>{{ c.id_cliente }}</td>
+            <td>{{ c.nombre }}</td>
+            <td>{{ c.email }}</td>
+
+            <td class="acciones">
+
+              <button class="btn-info"
+                      (click)="verPedidos(c.id_cliente!); $event.stopPropagation()">
+                Pedidos
+              </button>
+
+              <button class="btn-edit"
+                      (click)="editar(c); $event.stopPropagation()">
+                Editar
+              </button>
+
+              <button class="btn-delete"
+                      (click)="eliminar(c.id_cliente!); $event.stopPropagation()">
+                Eliminar
+              </button>
+
+            </td>
+          </tr>
+        </tbody>
+
+      </table>
+
+      <p *ngIf="clientes.length === 0" style="text-align: center; color: #6b7280; padding: 20px;">No hay clientes para mostrar.</p>
+
+    </div>
+
+  </div>
+
+  <div *ngIf="clienteSeleccionado"
+       style="flex: 1; border-left: 2px solid #eee; padding-left: 20px;">
+
+    <div style="display: flex; justify-content: space-between; align-items: center;">
+      <h3>Pedidos de {{ clienteSeleccionado.nombre }}</h3>
+
+      <button class="btn-secondary" (click)="clienteSeleccionado = null">
+        ✕
+      </button>
+    </div>
+
+
+    <!--<app-pedidos
+      </app-pedidos> [clienteId]="clienteSeleccionado.id_cliente"
+      [isPreview]="true">
+    </app-pedidos>--> 
+
+  </div>
+
+</div>

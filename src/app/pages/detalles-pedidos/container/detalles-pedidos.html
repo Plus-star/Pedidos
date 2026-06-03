@@ -1,0 +1,64 @@
+<div class="container">
+
+  <h2>Detalles del Pedido #{{ idPedido }}</h2>
+
+  <div style="margin-bottom: 16px;">
+    <button class="btn-secondary" (click)="verPedidos()">← Volver a Pedidos</button>
+  </div>
+
+  <p *ngIf="mensaje" class="mensaje">{{ mensaje }}</p>
+
+  <div class="card form-card">
+    <h3>{{ editando ? 'Editar detalle' : 'Nuevo detalle' }}</h3>
+
+    <input [(ngModel)]="form.producto" placeholder="Producto *" />
+    <input type="number" [(ngModel)]="form.cantidad" placeholder="Cantidad *" />
+    <input type="number" [(ngModel)]="form.precio" placeholder="Precio *" />
+
+    <div class="form-actions">
+      <button class="btn-primary" (click)="editando ? actualizar() : guardar()">
+        {{ editando ? 'Actualizar' : 'Crear' }}
+      </button>
+
+      <button class="btn-secondary" *ngIf="editando" (click)="limpiar()">
+        Cancelar
+      </button>
+    </div>
+  </div>
+
+  <div class="card table-card">
+    <table class="tabla" *ngIf="detalles.length > 0">
+      <thead>
+        <tr>
+          <th>Producto</th>
+          <th>Cantidad</th>
+          <th>Precio</th>
+          <th>Total</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+
+    <tbody>
+      <tr *ngFor="let d of detalles">
+        <td>{{ d.producto }}</td>
+        <td>{{ d.cantidad }}</td>
+        <td>{{ d.precio }}</td>
+        <td>{{ d.cantidad * d.precio }}</td>
+
+          <td class="acciones">
+            <button class="btn-edit" (click)="editar(d)">
+              Editar
+            </button>
+
+            <button class="btn-delete" (click)="eliminar(d.id_detalle)">
+              Eliminar
+            </button>
+          </td>
+      </tr>
+    </tbody>
+    </table>
+
+    <p *ngIf="detalles.length === 0" style="text-align: center; color: #6b7280; padding: 20px;">No hay detalles para mostrar.</p>
+
+    <p *ngIf="detalles.length > 0" style="text-align: right; font-weight: bold; margin-top: 10px;">Total General: {{ totalGeneral | currency }}</p>
+</div>
