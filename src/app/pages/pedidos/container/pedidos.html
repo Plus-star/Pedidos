@@ -1,0 +1,79 @@
+<div class="container">
+
+  <h2 *ngIf="!isPreview">Pedidos</h2>
+
+  <h3 *ngIf="isPreview">Pedidos Recientes</h3>
+
+  <div *ngIf="!isPreview" style="margin-bottom: 16px;">
+    <button class="btn-secondary" (click)="volverAClientes()">← Volver a Clientes</button>
+  </div>
+
+  <p *ngIf="mensaje" class="mensaje">{{ mensaje }}</p>
+
+  <div *ngIf="!isPreview && clienteActualId !== null" class="card form-card">
+    <h3>{{ editandoId ? 'Editar pedido' : 'Nuevo pedido' }}</h3>
+
+    <input [(ngModel)]="form.fecha" placeholder="Fecha *" />
+
+    <div class="form-actions">
+      <button class="btn-primary" (click)="guardar()">
+        {{ editandoId ? 'Actualizar' : 'Crear' }}
+      </button>
+
+      <button class="btn-secondary" *ngIf="editandoId" (click)="limpiar()">
+        Cancelar
+      </button>
+    </div>
+  </div>
+
+  <div class="card table-card">
+
+    <table class="tabla">
+      <thead>
+        <tr>
+          <th>Id</th>
+          <th>Cliente</th>
+          <th>Fecha</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <tr *ngFor="let p of pedidos">
+          <td>{{ p.id_pedido }}</td>
+          <td>{{ getNombreCliente(p.id_cliente) }}</td>
+          <td>{{ p.fecha }}</td>
+
+          <td class="acciones" *ngIf="!isPreview">
+            <button class="btn-info" (click)="verDetallesPedidos(p.id_pedido)">
+              Detalles
+            </button> 
+
+            <button class="btn-secondary" (click)="verDetallesClientes(p.id_cliente)">
+              Cliente
+            </button>
+
+            <button *ngIf="!isPreview && clienteActualId !== null" class="btn-edit" (click)="editar(p)">
+              Editar
+            </button>
+
+            <button class="btn-delete" (click)="eliminar(p.id_pedido)">
+              Eliminar
+            </button>
+          </td>
+
+          <td class="acciones" *ngIf="isPreview">
+            <button class="btn-info" (click)="verDetallesPedidos(p.id_pedido)">
+              Ver Detalles
+            </button>
+          </td>
+        </tr>
+      </tbody>
+
+    </table>
+
+    <p *ngIf="pedidos.length === 0" style="text-align: center; color: #6b7280; padding: 20px;">No hay pedidos para mostrar.</p>
+
+  </div>
+
+</div>
